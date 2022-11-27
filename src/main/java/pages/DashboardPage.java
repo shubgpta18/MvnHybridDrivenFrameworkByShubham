@@ -3,6 +3,7 @@ package pages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -10,6 +11,9 @@ import org.openqa.selenium.support.PageFactory;
 import base.PredefinedActions;
 
 public class DashboardPage extends PredefinedActions {
+	
+	Logger log = Logger.getLogger(DashboardPage.class);
+
 	private static DashboardPage dashboardPage;
 	@FindBy(xpath = "//div[contains(@class,'oxd dashboard-widget-shell') and not(contains(@class,'ng-hide'))]//div[@class='widget-header']//span//following-sibling::span")
 	private List<WebElement> dashboardWidgetsHeader;
@@ -30,6 +34,7 @@ public class DashboardPage extends PredefinedActions {
 	}
 
 	public int getCountOfWidgets() {
+		log.debug("Checking total no. of widgets");
 		waitTillDashboardgetsLoaded();
 		return dashboardWidgetsHeader.size();
 
@@ -40,7 +45,7 @@ public class DashboardPage extends PredefinedActions {
 	}
 
 	public List<String> geAlltWidgetsTitle() {
-
+		log.debug("Storing titles of all widgets in list");
 		return getListOfWebElementText(dashboardWidgetsHeader);
 
 	}

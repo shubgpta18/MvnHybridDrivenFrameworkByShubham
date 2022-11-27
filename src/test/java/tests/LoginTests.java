@@ -3,7 +3,9 @@ package tests;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.testng.log4testng.Logger;
 
 import DataProvider.LoginDataProvider;
 import base.PredefinedActions;
@@ -11,44 +13,45 @@ import pages.LoginPage;
 
 public class LoginTests {
 	WebDriver driver;
-
+	Logger log =Logger.getLogger(LoginTests.class);
+	
 	@Test(dataProvider = "LoginData", dataProviderClass = LoginDataProvider.class)
 	public void TC1_VerifyLoginFunctionality(String url, String uname, String password, boolean isLoginSuccessful) {
-		System.out.println("Step 1: Launch your Browser and load URL");
+		log.info("Step 1: Launch your Browser and load URL");
 		PredefinedActions.start(url);
 		LoginPage login = new LoginPage();
 
-		System.out.println("Step 2: Verify Logo displayed on Login Page");
+		log.info("Step 2: Verify Logo displayed on Login Page");
 		Assert.assertEquals(login.isLogoPresent(), true, "Logo is not present");
-		System.out.println("Logo is present");
+		log.info("Logo is present");
 
-		System.out.println("Step 3: Login with given credential");
+		log.info("Step 3: Login with given credential");
 		login.login(uname, password);
 		if (isLoginSuccessful) {
 
-			System.out.println("Step 4:User should navigate to home page");
+			log.info("Step 4:User should navigate to home page");
 			String expectedTitle = "Employee Management";
 			String ActualTitle = login.getPageTitle();
 			Assert.assertEquals(expectedTitle, ActualTitle,
 					"Expected Title is " + expectedTitle + "where as Actual Title is " + ActualTitle);
-			System.out.println("Login is successful and user is navigated to home page");
+			log.info("Login is successful and user is navigated to home page");
 		} else {
-			System.out.println("User logged in with invalid credentials");
-			System.out.println("Step4: Verify if retry Login page is present");
+			log.info("User logged in with invalid credentials");
+			log.info("Step4: Verify if retry Login page is present");
 			String ExpectedUrlContent = "retryLogin";
 			String ActualUrl = login.isUserOnRetryPage();
-			System.out.println(ActualUrl);
+			log.info(ActualUrl);
 			Assert.assertTrue(ActualUrl.endsWith(ExpectedUrlContent));
-			System.out.println("Retry page is loaded");
+			log.info("Retry page is loaded");
 		}
 	}
 
 	@Test(dataProvider = "LoginWithIncorrectData", dataProviderClass = LoginDataProvider.class)
 	public void TC1_1_VerifyErrorMessageWithoutEnteringUserNamePassword(String url, String uname, String password) {
-		System.out.println("Step 1: Launch your Browser and load URL");
+		log.info("Step 1: Launch your Browser and load URL");
 		PredefinedActions.start(url);
 		LoginPage login = new LoginPage();
-		System.out.println("Verify Error Message for blank userName and Password");
+		log.info("Verify Error Message for blank userName and Password");
 		login.clickOnSubmitBtn();
 
 		String ExpectedUserNameError = "Username cannot be empty";
@@ -66,7 +69,7 @@ public class LoginTests {
 
 	@AfterMethod
 	public void closeBrowser() {
-		System.out.println("Closing the browser");
+		log.info("Closing the browser");
 		PredefinedActions.closeBrowser();
 	}
 }
