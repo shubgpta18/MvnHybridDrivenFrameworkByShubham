@@ -4,10 +4,12 @@
 	<listeners>
 		<listener class-name="listners.RetryTestCases"></listener>
 	</listeners>
-	<test thread-count="5" name="Test">
+	<parameter name="browserName" value="Chrome"></parameter>
+	<parameter name="env" value="QA"></parameter>
+	<test thread-count="1" name="Test">
 		<classes>
 			<class name="tests.DashboardTests" />
-			<class name="testScripts.Experiments" />
+			<class name="tests.LoginTests" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

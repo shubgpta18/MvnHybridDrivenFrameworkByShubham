@@ -2,23 +2,47 @@ package tests;
 
 import java.io.IOException;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import org.testng.log4testng.Logger;
 
 import base.PredefinedActions;
+import constants.ConstantValues;
 import pages.LoginPage;
 import utility.PropertyFileOperations;
 
 public class TestBase {
+	Logger log =Logger.getLogger(TestBase.class);
+	
+	@BeforeSuite
+	public void initLog4j() {
+		PropertyConfigurator.configure(".//src//main//resources//config//log4j.properties");
+	}
 
 	@BeforeMethod
 	public void setUp() throws IOException {
-		System.out.println("Launch Browser and load URL");
-		PropertyFileOperations fileOperations = new PropertyFileOperations(".//src//main//resources//config//settings.properties");
-		String url = fileOperations.getValue("url");
+	String url = "";
+	String env = System.getProperty("env");
+		log.info("Launch Browser and load URL");
+		PropertyFileOperations fileOperations = new PropertyFileOperations(ConstantValues.loginPropertyFile);
+
+		switch (env.toLowerCase()) {
+		case "qa": {
+			url = fileOperations.getValue("QAurl");
+			break;
+		}
+		case "stage": {
+			url = fileOperations.getValue("Stageurl");
+			break;
+		}
+		default:
+			break;
+		}
+		log.info("Env is " +env+ " and url is: "+ url);
 		PredefinedActions.start(url);
 
 		LoginPage login = new LoginPage();

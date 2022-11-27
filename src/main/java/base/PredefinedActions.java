@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -19,10 +20,16 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import constants.ConstantValues;
 
 public class PredefinedActions {
 	protected static WebDriver driver;
@@ -30,9 +37,51 @@ public class PredefinedActions {
 	protected static Select select;
 	static WebDriverWait wait;
 
+	protected PredefinedActions() {
+
+	}
+	 static Logger log =Logger.getLogger(PredefinedActions.class);
+
 	public static void start(String url) {
-		System.setProperty("webdriver.chrome.driver", ".//src//test//resources//drivers//chromedriver.exe");
-		driver = new ChromeDriver();
+		String browser = System.getProperty("browserName");
+		// String env = System.getProperty("env");
+       log.trace("browser is " + browser);
+
+		switch (browser.toLowerCase()) {
+		case "chrome": {
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--incognito");
+			options.addArguments("--disable-notifications");
+			System.setProperty(ConstantValues.chromeDriverKey, ConstantValues.chromeDeiverPath);
+			driver = new ChromeDriver(options);
+			break;
+		}
+
+		case "firefox": {
+			System.setProperty(ConstantValues.chromeDriverKey, ConstantValues.chromeDeiverPath);
+			driver = new FirefoxDriver();
+			break;
+
+		}
+
+		case "safari": {
+			System.setProperty(ConstantValues.chromeDriverKey, ConstantValues.chromeDeiverPath);
+			driver = new SafariDriver();
+			break;
+
+		}
+
+		case "ie": {
+			System.setProperty(ConstantValues.chromeDriverKey, ConstantValues.chromeDeiverPath);
+			driver = new InternetExplorerDriver();
+			break;
+
+		}
+
+		default:
+			break;
+		}
+
 		driver.manage().window().maximize();
 		driver.get(url);
 
@@ -149,6 +198,7 @@ public class PredefinedActions {
 	}
 
 	protected void clickOnElement(WebElement e) {
+		log.trace("Scrolling utill element is visivle for clicking");
 		scrollTillElement(e);
 		e.click();
 	}
