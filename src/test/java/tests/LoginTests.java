@@ -1,11 +1,11 @@
 package tests;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import org.testng.log4testng.Logger;
 
 import DataProvider.LoginDataProvider;
 import base.PredefinedActions;
@@ -13,8 +13,8 @@ import pages.LoginPage;
 
 public class LoginTests {
 	WebDriver driver;
-	Logger log =Logger.getLogger(LoginTests.class);
-	
+	Logger log = Logger.getLogger(LoginTests.class);
+
 	@Test(dataProvider = "LoginData", dataProviderClass = LoginDataProvider.class)
 	public void TC1_VerifyLoginFunctionality(String url, String uname, String password, boolean isLoginSuccessful) {
 		log.info("Step 1: Launch your Browser and load URL");
@@ -56,13 +56,13 @@ public class LoginTests {
 
 		String ExpectedUserNameError = "Username cannot be empty";
 		String ActualUserNameError = login.getEmptyUsernameErrorMessage();
-
+		log.info(ActualUserNameError);
 		Assert.assertEquals(ActualUserNameError, ExpectedUserNameError,
 				"Actual error message is " + ActualUserNameError + " where as expected is " + ExpectedUserNameError);
 
 		String ExpectedPasswordError = "Password cannot be empty";
 		String ActualPasswordError = login.getEmptyPasswordErrorMessage();
-
+		log.info(ActualPasswordError);
 		Assert.assertEquals(ActualPasswordError, ExpectedPasswordError,
 				"Actual error message is " + ActualPasswordError + " where as expected is " + ExpectedPasswordError);
 	}
