@@ -1,6 +1,7 @@
 package pages;
 
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import base.PredefinedActions;
 
 public class LoginPage extends PredefinedActions {
+	Logger log = Logger.getLogger(LoginPage.class);
 
 	@FindBy(xpath = "//input[@name='txtUsername']")
 	private WebElement userNameElement;
@@ -64,10 +66,13 @@ public class LoginPage extends PredefinedActions {
 	}
 	
 	public String getEmptyUsernameErrorMessage() {
+		log.debug("Getting Empty Username message");
+
 		return  getParticularText(userNameErrorElement);
 	}
 	
 	public String getEmptyPasswordErrorMessage() {
+		log.debug("Getting Empty Password message");
 		return  getParticularText(passwordErrorElement);
 	}
 }
