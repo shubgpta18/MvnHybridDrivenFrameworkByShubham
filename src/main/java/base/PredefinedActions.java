@@ -221,6 +221,7 @@ public class PredefinedActions {
 	}
 
 	public String getcurrentURL() {
+		log.trace("Getting current URL");
 		return driver.getCurrentUrl();
 	}
 
