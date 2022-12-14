@@ -11,10 +11,11 @@ import org.openqa.selenium.support.PageFactory;
 import base.PredefinedActions;
 
 public class DashboardPage extends PredefinedActions {
-	
+
 	Logger log = Logger.getLogger(DashboardPage.class);
 
 	private static DashboardPage dashboardPage;
+	
 	@FindBy(xpath = "//div[contains(@class,'oxd dashboard-widget-shell') and not(contains(@class,'ng-hide'))]//div[@class='widget-header']//span//following-sibling::span")
 	private List<WebElement> dashboardWidgetsHeader;
 
@@ -48,5 +49,20 @@ public class DashboardPage extends PredefinedActions {
 		log.debug("Storing titles of all widgets in list");
 		return getListOfWebElementText(dashboardWidgetsHeader);
 
+	}
+
+	enum Menu {
+		EMPLOYEELIST("Employee List "), MYINFO("My Info "), DIRECTORY("Directory ");
+
+		public String menuItem;
+
+		Menu(String menuTitle) {
+			this.menuItem = menuTitle;
+		}
+
+	}
+
+	public void gotoMenu(Menu menuName) {
+		String str = menuName.menuItem;
 	}
 }

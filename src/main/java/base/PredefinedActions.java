@@ -229,14 +229,15 @@ public class PredefinedActions {
 		return e.getText();
 	}
 
-	public static void takeScreenshot(String testCaseName) {
+	public static String takeScreenshot() {
 		TakesScreenshot ts = (TakesScreenshot) driver;
-		File srcfile = ts.getScreenshotAs(OutputType.FILE);
-		try {
-			FileUtils.copyFile(srcfile, new File("./failedTestCases/" + testCaseName + ".jpg"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return ts.getScreenshotAs(OutputType.BASE64);
+//		File srcfile = ts.getScreenshotAs(OutputType.FILE);
+//		try {
+//			FileUtils.copyFile(srcfile, new File("./failedTestCases/" + testCaseName + ".jpg"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	final static public void closeBrowser() {

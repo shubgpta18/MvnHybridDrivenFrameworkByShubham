@@ -1,6 +1,5 @@
 package pages;
 
-
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -29,7 +28,7 @@ public class LoginPage extends PredefinedActions {
 
 	@FindBy(id = "txtUsername-error")
 	private WebElement userNameErrorElement;
-	
+
 	@FindBy(id = "txtPassword-error")
 	private WebElement passwordErrorElement;
 
@@ -64,15 +63,14 @@ public class LoginPage extends PredefinedActions {
 	public String isUserOnRetryPage() {
 		return getcurrentURL();
 	}
-	
+
 	public String getEmptyUsernameErrorMessage() {
 		log.debug("Getting Empty Username message");
-
-		return  getParticularText(userNameErrorElement);
+		return getParticularText(userNameErrorElement);
 	}
-	
+
 	public String getEmptyPasswordErrorMessage() {
 		log.debug("Getting Empty Password message");
-		return  getParticularText(passwordErrorElement);
+		return getParticularText(passwordErrorElement);
 	}
 }
