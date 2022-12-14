@@ -13,20 +13,29 @@ import org.testng.log4testng.Logger;
 import base.PredefinedActions;
 import constants.ConstantValues;
 import pages.LoginPage;
+import reports.ExtentManager;
 import utility.PropertyFileOperations;
 
-public class TestBase {
-	Logger log =Logger.getLogger(TestBase.class);
-	
+public class TestBase extends ExtentManager {
+	Logger log = Logger.getLogger(TestBase.class);
+
 	@BeforeSuite
-	public void initLog4j() {
+	public void beforeSuite() {
+		ExtentManager.initExtentReport();
 		PropertyConfigurator.configure(".//src//main//resources//config//log4j.properties");
 	}
 
+	@AfterSuite
+	public void afterSuite() {
+		ExtentManager.flushReport();
+	}
+
 	@BeforeMethod
-	public void setUp() throws IOException {
-	String url = "";
-	String env = System.getProperty("env");
+	public void setUp(ITestResult result) throws IOException {
+		ExtentManager.createTest(result.getMethod().getMethodName());
+
+		String url = "";
+		String env = System.getProperty("env");
 		log.info("Launch Browser and load URL");
 		PropertyFileOperations fileOperations = new PropertyFileOperations(ConstantValues.loginPropertyFile);
 
@@ -42,7 +51,7 @@ public class TestBase {
 		default:
 			break;
 		}
-		log.info("Env is " +env+ " and url is: "+ url);
+		log.info("Env is " + env + " and url is: " + url);
 		PredefinedActions.start(url);
 
 		LoginPage login = new LoginPage();
@@ -57,10 +66,14 @@ public class TestBase {
 	public void closeBrowser(ITestResult result) {
 		int status = result.getStatus();
 		if (ITestResult.FAILURE == status) {
-			PredefinedActions.takeScreenshot(result.getMethod().getMethodName());
-		} else if (ITestResult.SUCCESS == status) {
-			PredefinedActions.takeScreenshot(result.getMethod().getMethodName());
+			ExtentManager.fail(result.getThrowable().getMessage());
 
+			// PredefinedActions.takeScreenshot(result.getMethod().getMethodName());
+		} else if (ITestResult.SUCCESS == status) {
+			// PredefinedActions.takeScreenshot(result.getMethod().getMethodName());
+			ExtentManager.pass();
+		} else if (ITestResult.SKIP == status) {
+			ExtentManager.skip(result.getThrowable().getMessage());
 		}
 		PredefinedActions.closeBrowser();
 	}
